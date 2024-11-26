@@ -1,4 +1,4 @@
-## FeedMe Software Engineer Take Home Assignment
+## Hotcake Software Engineer Take Home Assignment
 Below is a take home assignment before the interview of the position. You are required to
 1. Understand the situation and use case. You may contact the interviewer for further clarification.
 2. Fork this repo and implement the requirement with your most familiar tools.
