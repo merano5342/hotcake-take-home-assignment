@@ -1,5 +1,3 @@
-import { stat } from 'fs';
-
 export type OrderType = {
 	id: number;
 	orderType: 'normal' | 'VIP';
@@ -15,6 +13,7 @@ export const initialState: StateType = {
 export type ActionType =
 	| { type: 'ADD_BOT'; payload: number }
 	| { type: 'REMOVE_BOT'; payload: number }
+
 	| { type: 'ADD_ORDER'; payload: { id: number; orderType: 'normal' | 'VIP' } }
 	| { type: 'PRECESS_ORDER'; payload: { botId: number; orderId: number } }
 	| { type: 'CANCEL_ORDER'; payload: { orderId: number } }
@@ -31,8 +30,6 @@ export const orderControlReducer = (
 				bots: [...state.bots, { id: action.payload, precessing: null }],
 			};
 		case 'REMOVE_BOT':
-			const newBots = [...state.bots];
-			newBots.pop();
 			return {
 				...state,
 				bots: state.bots.filter((bot) => bot.id !== action.payload),
@@ -88,7 +85,7 @@ export const orderControlReducer = (
 				}),
 			};
 
-	
+
 		case 'COMPLETE_ORDER':
 			return {
 				...state,

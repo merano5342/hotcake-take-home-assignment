@@ -1,4 +1,3 @@
-import { Button } from '@/components/ui/button';
 describe('McDonald Order Management', () => {
 	beforeEach(() => {
 		cy.visit('http://localhost:3000');
