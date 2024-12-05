@@ -9,12 +9,12 @@ export type BotType = { id: number; precessing: null | number };
 export type StateType = { bots: BotType[]; orders: OrderType[] };
 
 export const initialState: StateType = {
-	bots: [{ id: 0, precessing: null }],
+	bots: [],
 	orders: [],
 };
 export type ActionType =
-	| { type: 'ADD_BOT' }
-	| { type: 'REMOVE_BOT' }
+	| { type: 'ADD_BOT'; payload: number }
+	| { type: 'REMOVE_BOT'; payload: number }
 	| { type: 'ADD_ORDER'; payload: { id: number; orderType: 'normal' | 'VIP' } }
 	| { type: 'PRECESS_ORDER'; payload: { botId: number; orderId: number } }
 	| { type: 'CANCEL_ORDER'; payload: { orderId: number } }
@@ -28,17 +28,14 @@ export const orderControlReducer = (
 		case 'ADD_BOT':
 			return {
 				...state,
-				bots: [
-					...state.bots,
-					{ id: state.bots[state.bots.length - 1].id + 1, precessing: null },
-				],
+				bots: [...state.bots, { id: action.payload, precessing: null }],
 			};
 		case 'REMOVE_BOT':
 			const newBots = [...state.bots];
 			newBots.pop();
 			return {
 				...state,
-				bots: newBots,
+				bots: state.bots.filter((bot) => bot.id !== action.payload),
 			};
 		case 'ADD_ORDER':
 			const newOrder: OrderType = {

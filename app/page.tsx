@@ -65,14 +65,14 @@ export default function Home() {
 	}, []);
 
 	const handleAddBot = useCallback(() => {
-		dispatch({ type: 'ADD_BOT' });
-	}, [dispatch]);
+		dispatch({ type: 'ADD_BOT', payload: bots.length + 1 });
+	}, [dispatch, bots]);
 
 	const handleRemoveBot = useCallback(() => {
-		if (bots.length > 1) {
+		// if (bots.length > 1) {
 			const lastBot = bots[bots.length - 1];
 
-      // 如果機器人正在處理訂單，則取消訂單
+			// 如果機器人正在處理訂單，則取消訂單
 			if (lastBot.precessing !== null) {
 				const timer = timerIds.find((timer) => timer.botId === lastBot.id);
 				if (timer) {
@@ -86,8 +86,8 @@ export default function Home() {
 					},
 				});
 			}
-			dispatch({ type: 'REMOVE_BOT' });
-		}
+			dispatch({ type: 'REMOVE_BOT', payload: lastBot.id });
+		// }
 	}, [bots, timerIds, removeTimer, dispatch]);
 
 	const handleAddOrder = useCallback(
@@ -104,15 +104,23 @@ export default function Home() {
 		<main className="grid md:grid-cols-3 gap-4 md:gap-8 justify-center h-screen p-4 md:p-20 auto-rows-max">
 			<RolePanel title="manger">
 				<div className="flex gap-2">
-					<Button onClick={handleAddBot}>+ Bot</Button>
-					<Button onClick={handleRemoveBot}>- Bot</Button>
+					<Button className="add-bot" onClick={handleAddBot}>
+						+ Bot
+					</Button>
+					<Button
+						className="remove-bot"
+						disabled={bots.length < 1}
+						onClick={handleRemoveBot}
+					>
+						- Bot
+					</Button>
 				</div>
 			</RolePanel>
 
 			<RolePanel title="vip customer">
 				<Button
+					className="add-vip-order border-red-900 text-red-900"
 					variant="outline"
-					className="border-red-900"
 					onClick={() => handleAddOrder(Date.now(), 'VIP')}
 				>
 					New VIP Order
@@ -120,6 +128,7 @@ export default function Home() {
 			</RolePanel>
 			<RolePanel title="normal customer">
 				<Button
+					className="add-normal-order border-black"
 					variant="outline"
 					onClick={() => handleAddOrder(Date.now(), 'normal')}
 				>
@@ -130,11 +139,11 @@ export default function Home() {
 			<ListPanel title="bots" bots={bots} />
 
 			<ListPanel
-				title="PENDING"
+				title="pending"
 				orders={orders.filter((order) => order.status === 'pending')}
 			/>
 			<ListPanel
-				title="COMPLETE"
+				title="complete"
 				orders={orders.filter((order) => order.status === 'complete')}
 			/>
 		</main>
